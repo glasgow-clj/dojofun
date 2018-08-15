@@ -1,0 +1,24 @@
+(ns bowling.core-test
+  (:require [clojure.test :refer :all]
+            [bowling.game :refer :all]))
+
+(deftest total-score
+  (testing "An awesome bowling game"
+    (is (= 21 (bowling [[1 2] [8 1] [9 0]])))
+    (is (= 31 (bowling [[1 2] [8 2] [9 0]])))
+    (is (= 17 (bowling [[1 2] [10 0] [1 1]])))
+    (is (= 50 (bowling [[1 2] [10 0] [10 0] [3 4]])))(is (= 50 (bowling [[1 2] [10 0] [10 0] [3 4]])))))
+;                         3      23     17    7
+(deftest special-case-test
+  (testing "Can detect a spare"
+    (is (false? (spare? [7 2])))
+    (is (true? (spare? [8 2]))))
+  (testing "Can detect a strike"
+    (is (false? (strike? [7 2])))
+    (is (false? (strike? [8 2])))
+    (is (true? (strike? [10 0])))))
+
+(deftest score-frame-test
+  (testing "Scores a frame"
+    (is (= 3 (score-frame [[1 2] [8 1]])))
+    (is (= 12 (score-frame [[4 6] [2 3]])))))
