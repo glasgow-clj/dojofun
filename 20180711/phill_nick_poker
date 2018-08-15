@@ -1,5 +1,10 @@
 (ns deck)
 
+(defn make-deck []
+  (for [suit [:hearts :clubs :diamonds :spades]
+        value (flatten [:A (range 1 11) :J :Q :K])]
+    [value suit]))
+
 (defn new-game [players]
   {:deck    (make-deck)
    :players (mapv #(hash-map :player % :hand []) players)})
