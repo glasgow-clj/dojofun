@@ -1,0 +1,28 @@
+(ns bowling.game)
+
+(defn strike? [frame]
+  (and (= 0 (second frame))
+       (= 10 (+ (first frame) (second frame)))))
+
+(defn spare? [frame]
+  (and (not= 0 (second frame))
+       (= 10 (+ (first frame) (second frame)))))
+
+(defn score-frame [[first-frame second-frame third-frame]]
+  (cond
+    (nil? second-frame)
+    (reduce + first-frame)
+    (and (strike? first-frame) (strike? second-frame))
+    (+ 20 (first third-frame))
+    (strike? first-frame)
+    (+ 10 (reduce + second-frame))
+    (spare? first-frame)
+    (+ 10 (first second-frame))
+    :else
+    (reduce + first-frame)))
+
+(defn bowling [frames]
+  (reduce + (map score-frame
+                 (partition-all 3 1 frames))))
+                 
+                 
