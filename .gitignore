@@ -13,3 +13,5 @@ pom.xml.asc
 .nrepl-port
 .cpcache/
 *.idea
+dojos/.DS_Store
+.DS_Store
