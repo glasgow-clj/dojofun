@@ -1,4 +1,4 @@
-(ns dojofun.core
+ (ns dojofun.core
   (:gen-class))
 
   (defn- fizzbuzz [n]
