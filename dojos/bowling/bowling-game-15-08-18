@@ -1,0 +1,29 @@
+
+(def input-frames [[0 1] [2 3] [1 4] [2 5]])
+
+(defn frame-type
+  [[t1 t2]]
+  (cond (= t1 10) :strike
+        (= (+ t1 t2) 10) :spare
+        :else :amateur))
+
+(defn sum-frame
+  [f]
+  (apply + f))
+
+(defn score-strike
+  [[t1b t2b :as f2] [t1c t2c]]
+  (if (= (frame-type f2) :strike)
+    (+ 20 t1c)
+    (+ 10 t1b t2b)))
+
+(defn score-frame
+  [[t1a t2a :as f1] [t1b t2b :as f2] [f3]]
+  (case (frame-type f1)
+    :strike
+    (score-strike f2 f3)
+    :spare
+    (+ 10 t1b )
+    :amateur
+    (+ t1a t2a)
+    ))

@@ -1,0 +1,29 @@
+(ns deck)
+
+(defn make-deck []
+  (for [suit [:hearts :clubs :diamonds :spades]
+        value (flatten [:A (range 1 11) :J :Q :K])]
+    [value suit]))
+
+(defn new-game [players]
+  {:deck    (make-deck)
+   :players (mapv #(hash-map :player % :hand []) players)})
+
+(defn shuffle-deck [game]
+  (update game :deck shuffle))
+
+(defn deal [{:keys [players deck] :as game} card-count]
+  (let [dealt-cards (map vec (take card-count (partition (count players) deck)))
+        remaining-cards (drop (* card-count (count players)) deck)
+        players-with-cards (reduce
+                             (fn [players cards] (mapv #(update %1 :hand conj %2) players cards))
+                             players
+                             dealt-cards)]
+    (assoc game :deck remaining-cards
+                :players players-with-cards)))
+
+(-> (new-game ["Jimmy" "Shaz" "Doug" "Jake"])
+    shuffle-deck
+    (deal 3)
+    (deal 1)
+    (deal 1))
