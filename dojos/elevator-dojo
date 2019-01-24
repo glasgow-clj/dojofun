@@ -1,0 +1,46 @@
+(ns clojure-noob.elevator
+  (:require [clojure.core.async :as async] ))
+
+(def lift {:direction :up
+           :floor     1
+           :requests  []
+           :doors     :open})
+
+(defn request-destination [lift floor]
+  (update lift :requests conj floor))
+
+(defn move-toward [floor destination]
+  (if (> floor destination)
+    (dec floor)
+    (inc floor)))
+
+(defn step [{:keys [requests doors floor] :as lift}]
+  (let [next-destination (first requests)]
+    (cond
+      (= :open doors)            (update lift :doors (constantly :closed))
+      (nil? next-destination)    lift
+      (= floor next-destination) (assoc lift :doors :open :requests (vec (rest requests)))
+      :else                      (update lift :floor move-toward next-destination))))
+
+(-> lift
+    (request-destination 3)
+    step
+    step
+    step
+    step
+    step
+    step)
+
+(defn start [lift requests]
+  (async/go-loop [timer (async/timeout 2000)
+                  lift lift]
+    (let [lift' (async/alt!
+            timer ([_ _] (let [l (step lift)]
+                           (clojure.pprint/pprint l)
+                           l))
+            requests ([destination _] (request-destination lift destination)))]
+      (recur (async/timeout 2000) lift'))))
+
+(def requests (async/chan 2))
+
+(start lift requests)
