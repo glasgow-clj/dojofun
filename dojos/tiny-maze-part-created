@@ -1,0 +1,32 @@
+(ns tiny-maze.solver)
+
+(defn find-start-position [maze]
+  (first (for [[x row] (zipmap (range) maze)
+               [y col] (zipmap (range) row)
+               :when (= :S col)]
+           [x y])))
+
+(defn get-neigbours [position maze]
+  (case position
+    [0, 0]
+    [0 _]
+
+    ; if we row = 0 don't do - 1
+    ; if col 0 dont' do -1
+    ; if row is last row don't do +1
+    ; if last column don't do +1
+    ))
+
+(-> [[:S 0 1]
+     [1  0 1]
+     [1  0 :E]]
+  flatten)
+
+
+
+(defn solve-maze [maze]
+  (let [width (count (first maze))
+        up #(- % width)
+        down ]
+
+    ))
